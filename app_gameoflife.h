@@ -4,7 +4,7 @@
 
 #else
 
-int16_t gol_interval = 0;
+int32_t gol_interval = 0;
 //uint16_t seed = 0;
 
 // Notice: this is quite a suboptimal implementation. - But it'll do...

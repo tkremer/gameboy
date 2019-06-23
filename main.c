@@ -16,8 +16,10 @@
 #define EVENT_QUEUE_SIZE 8
 #include "events.c.h"
   
-#define TIMER_DIV 1024
-#define TIMER_SCALE TIMER_SCALE_DIV_1024
+#define TIMER_DIV 1
+#define TIMER_SCALE TIMER_SCALE_1
+//#define TIMER_DIV 1024
+//#define TIMER_SCALE TIMER_SCALE_DIV_1024
 #define shortdelay msec2ticks(200.0,TIMER_DIV)
 #define longdelay msec2ticks(800.0,TIMER_DIV)
 
@@ -665,7 +667,7 @@ void startup() {
 
   adc_conf(true,0xc8,ADC_DIV_128); // pins C3, ADC6 and ADC7
   adc_watch_init(0xc8);
-  adc_watch_start();
+  //adc_watch_start();
 
 //  segment_display(0x0202020202020202);
   NONATOMIC_BLOCK(NONATOMIC_FORCEOFF) {

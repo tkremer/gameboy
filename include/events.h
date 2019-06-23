@@ -1,3 +1,18 @@
+/*
+
+  High-level timer event subsystem.
+  Manages a queue of timed events and a time source measured in ticks-since-reset. Consumes Timer 1.
+
+  Copyright (c) 2018 Thomas Kremer
+
+*/
+
+/*
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License version 2 or 3 as
+ * published by the Free Software Foundation.
+ */
+
 #ifndef _EVENTS_H_
 #define _EVENTS_H_
 

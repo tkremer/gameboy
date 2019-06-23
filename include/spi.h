@@ -1,7 +1,24 @@
+/*
+
+  SPI functions, both synchronous and asynchronous.
+  Detects, if LUFA is used and uses its SPI.h then.
+
+  Copyright (c) 2016 Thomas Kremer
+
+*/
+
+/*
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License version 2 or 3 as
+ * published by the Free Software Foundation.
+ */
+
 #ifndef __MY_SPI_H__
 #define __MY_SPI_H__
 
-#ifndef NO_LUFA
+//#ifndef NO_LUFA
+// defined in LUFA/Version.h. Include before this file if you use LUFA.
+#ifdef LUFA_VERSION_INTEGER
 #include <LUFA/Drivers/Peripheral/SPI.h>
 #endif
 
@@ -36,7 +53,8 @@ static inline uint8_t SPI_AsyncWaitResult(void)
 
 #define On_SPI_Complete ISR(SPI_STC_vect, ISR_BLOCK)
 // usage: On_SPI_Complete { do_something(); ... }
-#ifdef NO_LUFA
+//#ifdef NO_LUFA
+#ifndef LUFA_VERSION_INTEGER
 
 static inline uint8_t SPI_TransferByte(const uint8_t byte) ATTR_ALWAYS_INLINE;
 static inline void SPI_Enable() ATTR_ALWAYS_INLINE;

@@ -1,3 +1,18 @@
+/*
+
+  High-level timer event subsystem.
+  Manages a queue of timed events and a time source measured in ticks-since-reset. Consumes Timer 1.
+
+  Copyright (c) 2018 Thomas Kremer
+
+*/
+
+/*
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License version 2 or 3 as
+ * published by the Free Software Foundation.
+ */
+
 #include "events.h"
 #include "timers.h"
 
@@ -16,7 +31,7 @@ static inline uint8_t predmod(uint8_t i, uint8_t mod)
 
 // instead of x > y. Means that x >= y > x-(1<<(sizeof(x)-1))
 // <=> (x-y >= 0) for signed types:
-#define gteq_mod_type(x,y) (((x) - (y)) & (1 << (sizeof(x)-1)) == 0)
+#define gteq_mod_type(x,y) (((x) - (y)) & (1 << (sizeof(x)*8-1)) == 0)
 
 static inline bool gteq_mod32(uint32_t x,uint32_t y) {
   return (int32_t)(x-y) >= 0;

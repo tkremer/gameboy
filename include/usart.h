@@ -1,4 +1,17 @@
-// --- USART ---
+/*
+
+  USART driver with configurable output buffer and character-input event.
+
+  Copyright (c) 2018 Thomas Kremer
+
+*/
+
+/*
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License version 2 or 3 as
+ * published by the Free Software Foundation.
+ */
+
 
 #ifndef __USART_H__
 #define __USART_H__
@@ -75,6 +88,20 @@ void usart_init() {
 void usart_init_baud(uint32_t baud) {
   uint8_t ubrr = F_CPU*1.0/8/baud-1;
   usart_init_ubrr(ubrr);
+}
+
+// after initialization, the transmitter is enabled.
+// to disable it again (to attach other transmitting hardware), use these:
+// You need to manage Pin D1 configuration first, though
+// (reasonable default is input with pull-up).
+void usart_disable_transmitter() {
+  UCSR0B &= ~(1<<TXEN0); // disable TX
+  // This will only take effect once all pending output has been flushed.
+  // Any output in the output buffer might be discarded.
+}
+
+void usart_enable_transmitter() {
+  UCSR0B |= (1<<TXEN0); // enable TX
 }
 
 bool usart_can_read() {
@@ -168,6 +195,7 @@ void usart_write_P(const char* s, int len) {
   }
 }
 
+// Note: if you use this macro multiple times for the same string, it will consume its size in progmem multiple times. Better to wrap it in an inline function then.
 #define usart_msg(msg) usart_write_P(PSTR(msg),sizeof(msg)-1)
 
 // gets the free space in the write buffer.

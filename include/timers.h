@@ -1,3 +1,18 @@
+/*
+
+  basic hardware timer abstraction for AVRs.
+  TODO: support Timer2
+
+  Copyright (c) 2016 Thomas Kremer
+
+*/
+
+/*
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License version 2 or 3 as
+ * published by the Free Software Foundation.
+ */
+
 #ifndef __TIMERS_H__
 #define __TIMERS_H__
 
@@ -58,6 +73,7 @@
 // For Timer_SetScale:
 #define TIMER_SCALE_STOPPED  0
 #define TIMER_SCALE_1        1
+#define TIMER_SCALE_DIV_1    1
 #define TIMER_SCALE_DIV_8    2
 #define TIMER_SCALE_DIV_64   3
 #define TIMER_SCALE_DIV_256  4
@@ -117,15 +133,15 @@
 // we do an exxplicit cast to int32_t, to prevent fp arithmetic from dropping
 // in when using i += sec2ticks(T,DIV), which would otherwise do so.
 // I consider this a bug in gcc.
-#define usec2ticks(t,div) ((int32_t)((t)*1e-6*F_CPU/(div)))
-#define msec2ticks(t,div) ((int32_t)((t)*1e-3*F_CPU/(div)))
-#define sec2ticks(t,div) ((int32_t)((t)*1.0*F_CPU/(div)))
+#define usec2ticks(t,div) ((int32_t)(((t)*1e-6*F_CPU)/(div)))
+#define msec2ticks(t,div) ((int32_t)(((t)*1e-3*F_CPU)/(div)))
+#define sec2ticks(t,div) ((int32_t)(((t)*1.0*F_CPU)/(div)))
 
 // probably useless, as on chip we will want to calculate everything in ticks:
 // DO NOT use the TIMER_SCALE_DIV_* constant directly here.
-#define ticks2usec(t,div) ((t)*1e6*(div)/F_CPU)
-#define ticks2msec(t,div) ((t)*1e3*(div)/F_CPU)
-#define ticks2sec(t,div) ((t)*1.0*(div)/F_CPU)
+#define ticks2usec(t,div) (((t)*1e6*(div))/F_CPU)
+#define ticks2msec(t,div) (((t)*1e3*(div))/F_CPU)
+#define ticks2sec(t,div) (((t)*1.0*(div))/F_CPU)
 
 /*  OCR0A   = 100;
   TCCR0A  = (0 << WGM01)  | (1 << WGM00);

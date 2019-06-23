@@ -1,4 +1,17 @@
-// --- ADC ---
+/*
+
+  ADC hardware accessors.
+
+  Copyright (c) 2019 Thomas Kremer
+
+*/
+
+/*
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License version 2 or 3 as
+ * published by the Free Software Foundation.
+ */
+
 
 #ifndef __ADC_H__
 #define __ADC_H__
@@ -52,6 +65,7 @@ int16_t adc_read(uint8_t srcpin, uint8_t ref) {
   }
   ADCSRA |= 1<<ADSC; // start conversion, also clear ADIF.
   // ADCSRB only contains auto-triggering source and ACME. What is ACME?
+  // Note: ACME is part of the "Analog Comparator Multiplexer Enable" and only documented in the Analog Comparator part of the datasheet. It isn't functional for the AC anyway while the ADC is switched on.
   while (!(ADCSRA & (1<<ADIF))); // wait for ADIF.
   //while (ADCSRA & ((1<<ADIF) | (1 << ADSC)) == 1<<ADSC);
   int16_t res = ADC;
@@ -103,14 +117,21 @@ void adc_set_channel(uint8_t srcpin, uint8_t ref) {
 
 #define On_ADC_read ISR (ADC_vect, ISR_BLOCK)
 
+// result is in centidegrees celsius, but min precision is ~1 degree and max deviation is ~3 degrees.
 int get_temperature() {
   int16_t res = adc_read(ADC_SRC_TEMP,ADC_REF_1V1);
-  int T = 2500 + (res-(int)314*1024.0/1100)*1100.0/1024*130.0/138*100;
+  //int T = 2500 + (res-(int)(314*1024.0/1100))*1100.0/1024*130.0/138*100;
+  // This is basically just ~101 centi-degrees per ADC unit.
+  // So, precision is only ~1 degree (and the spec values aren't exactly linear anyway). It is sensible to round this to integer arithmetic:
+  int T = res*101-27023;
+  // note that 0 <= res*101 < 1024*101 = 11264 < 1<<15, so we have no overflow.
+  // -45°C -> -4269.7, 25°C -> 2499.9, 85°C -> 8705.3
+  // ---> max deviation is 2.4°C, at the outer edges of the known range.
 //  int T = res;
-  return T; // deci-degrees
+  return T; // centi-degrees
   // from spec:
   // -45°C +25°C +85°C
-  // 242mV  314mV 380mV
+  // 242mV 314mV 380mV
   //
   // -> k=(85+45)K/(380-242)mV = 130/138 K/mV
   // (res/1024*1100mV - 314mV) * k + 25°C
