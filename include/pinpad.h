@@ -90,7 +90,7 @@
 */
 
 #include <avr/pgmspace.h>
-#include "adc_watch.h"
+#include <adc_watch.h>
 
 /* This needs to be done elsewhere:
 void EVENT_adc_watch(uint8_t channel, int16_t value) {

@@ -12,9 +12,9 @@
 #include <stdbool.h>
 #include <math.h>
 
-#include "timers.h"
+#include <timers.h>
 #define EVENT_QUEUE_SIZE 8
-#include "events.c.h"
+#include <events.c.h>
   
 #define TIMER_DIV 1
 #define TIMER_SCALE TIMER_SCALE_1
@@ -25,7 +25,7 @@
 
 
 #define EEPROMFS_VARS 2
-#include "eeprom.h"
+#include <eeprom.h>
 eepromfs_index_t eep_index;
 //#define eep_segment_low 0
 //#define eep_segment_high 1
@@ -48,13 +48,13 @@ eepromfs_index_t eep_index;
 #define ATTR_ALWAYS_INLINE __attribute__((always_inline))
 
 #define outbuf_size 80
-#include "usart.h"
+#include <usart.h>
 
-#include "adc.h"
-#include "adc_watch.h"
-#include "spi.h"
+#include <adc.h>
+#include <adc_watch.h>
+#include <spi.h>
 #include "prng.h"
-#include "pcd8544_display.h"
+#include <pcd8544_display.h>
 #include "testfont.h"
 
 // those should better be used in menu and applications...

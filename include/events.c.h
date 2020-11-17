@@ -3,7 +3,7 @@
   High-level timer event subsystem.
   Manages a queue of timed events and a time source measured in ticks-since-reset. Consumes Timer 1.
 
-  Copyright (c) 2018 Thomas Kremer
+  Copyright (c) 2018-2020 Thomas Kremer
 
 */
 
@@ -13,8 +13,8 @@
  * published by the Free Software Foundation.
  */
 
-#include "events.h"
-#include "timers.h"
+#include <events.h>
+#include <timers.h>
 
 static inline uint8_t succmod(uint8_t i, uint8_t mod)
 {
@@ -341,7 +341,13 @@ bool enqueue_event_abs(uint32_t time, event_handler_fun_t h, void* param)
       //uint8_t k = free_ix!=0 ? free_ix-1 : EVENT_QUEUE_SIZE-1;
       uint8_t k = predmod(free_ix,EVENT_QUEUE_SIZE);
       uint8_t low = predmod(first_ix,EVENT_QUEUE_SIZE);
-      while (time < event_queue[k].time && k != low) {
+      
+      // we have to care about time wraparound here, so we subtract the
+      // current time (coarsely) before comparing.
+      int32_t time_base = (int32_t)event_time_high<<16; //get_time, more coarse, but faster.
+      int32_t dtime = (int32_t)time-time_base;
+      //while (time < event_queue[k].time && k != low) {
+      while (dtime < (int32_t)event_queue[k].time-time_base && k != low) {
         events_decmod(k,EVENT_QUEUE_SIZE);
 //        if (k != 0) k--;
 //        else k = EVENT_QUEUE_SIZE-1;

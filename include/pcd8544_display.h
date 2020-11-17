@@ -18,7 +18,7 @@
 #ifndef __PCD8544_DISPLAY_H__
 #define __PCD8544_DISPLAY_H__
 
-#include "spi.h"
+#include <spi.h>
 #include <avr/pgmspace.h>
 
 #define LCD_WIDTH 84

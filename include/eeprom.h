@@ -141,7 +141,7 @@ typedef struct {
 #define EEPROM_SIZE sizeof(int32_t)
 #define EEPROM_VARS 4
 eepromfs_index_t eep_index;
-#include "eeprom.h"
+#include <eeprom.h>
 #define eevar1 0
 #define eevar2 1
 

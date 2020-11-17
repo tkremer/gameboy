@@ -8,7 +8,7 @@
 int32_t pinpadd_interval = sec2ticks(1.0/100,TIMER_DIV);
 uint8_t pinpadd_channel = 4;
 #define PINPAD_PIN pinpadd_channel
-#include "pinpad.h"
+#include <pinpad.h>
 
 char pinpadd_text[10];
 int pinpadd_i;

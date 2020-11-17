@@ -16,7 +16,7 @@
 #ifndef __ADC_WATCH_H__
 #define __ADC_WATCH_H__
 
-#include "adc.h"
+#include <adc.h>
 
 #define ADCW_STATE_STOPPED 0
 #define ADCW_STATE_INIT 1

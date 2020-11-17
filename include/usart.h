@@ -84,9 +84,11 @@ void usart_init() {
   usart_init_ubrr(ubrr);
 }
 
-// initialize to given baudrate. Will use floating point division.
+// UBRR0 = F_CPU*1.0/baudrate/8-1 (because of double speed mode)
+// initialize to given baudrate. Will not use floating point division.
 void usart_init_baud(uint32_t baud) {
-  uint8_t ubrr = F_CPU*1.0/8/baud-1;
+  //uint8_t ubrr = F_CPU*1.0/8/baud-1;
+  uint8_t ubrr = (((uint16_t)((uint32_t)F_CPU/baud) + 4)/8)-1;
   usart_init_ubrr(ubrr);
 }
 

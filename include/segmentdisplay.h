@@ -80,8 +80,8 @@
 */
 
 #include <avr/pgmspace.h>
-#include "timers.h"
-#include "events.h"
+#include <timers.h>
+#include <events.h>
 
 #define segment_display_period msec2ticks(1.0,TIMER_DIV)
 //#define segment_display_period sec2ticks(1.0,TIMER_DIV)

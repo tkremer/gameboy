@@ -8,15 +8,19 @@
 
 // To test actual limits:
 //#define servo_pulse_low msec2ticks(0.1,TIMER_DIV)
-//#define servo_pulse_high msec2ticks(12.8,TIMER_DIV)
+//#define servo_pulse_high msec2ticks(12.85,TIMER_DIV)
 
 // tested results:
 // correct range: 0.6 - 2.35 0.6..2.25 = 180°
-#define servo_pulse_low msec2ticks(0.6,TIMER_DIV)
-//miscalculation: #define servo_pulse_high msec2ticks(2.7,TIMER_DIV)
-#define servo_pulse_high msec2ticks(2.35,TIMER_DIV)
-#define servo_total_angle (180L*(235-60)/(225-60))
-// 0.6 + 216/255*(2.7-0.6) = 216/255*2.1 = 2.38
+//#define servo_pulse_low msec2ticks(0.6,TIMER_DIV)
+//#define servo_pulse_high msec2ticks(2.35,TIMER_DIV)
+//#define servo_total_angle (180L*(235-60)/(225-60))
+
+// new servos (tested): 450pwm-2500pwm; 180deg == 2435-450 +-8
+#define servo_pulse_low usec2ticks(450,TIMER_DIV)
+#define servo_pulse_high usec2ticks(2500,TIMER_DIV)
+#define servo_total_angle (180L*(2500-450)/(2435-450))
+
 #define servo_pwm_period msec2ticks(20,TIMER_DIV)
 #define servo_pin 5
 
@@ -46,19 +50,30 @@ void servo_update_display()
   display_clear();
   char msg[8];
   display_rect(0,0,11,8,COLOR_WHITE);
+  // hw_pos (0-255)
   snprintl(&msg[0],4,servo_pos);
   msg[4] = 0;
-  display_text(LCD_WIDTH/2-10,LCD_HEIGHT/2-10-4,&testfont,msg);
+  display_text(LCD_WIDTH/2-10,LCD_HEIGHT/2-15-4,&testfont,msg);
+  // steps per keypress
   snprintl(&msg[0],4,servo_step);
   msg[4] = 0;
-  display_text(LCD_WIDTH/2-10,LCD_HEIGHT/2-4,&testfont,msg);
+  display_text(LCD_WIDTH/2-10,LCD_HEIGHT/2-5-4,&testfont,msg);
+  // degrees rotation
   int32_t deg = ((int32_t)servo_pos)*servo_total_angle/255;
   snprintl(&msg[0],4,deg);
   msg[4] = 'd';
   msg[5] = 'e';
   msg[6] = 'g';
   msg[7] = 0;
-  display_text(LCD_WIDTH/2-10,LCD_HEIGHT/2+10-4,&testfont,msg);
+  display_text(LCD_WIDTH/2-10,LCD_HEIGHT/2+5-4,&testfont,msg);
+  // µs pwm
+  int32_t pwm = servo_pulse*256/usec2ticks(256,TIMER_DIV);
+  snprintl(&msg[0],4,pwm);
+  msg[4] = 'p';
+  msg[5] = 'w';
+  msg[6] = 'm';
+  msg[7] = 0;
+  display_text(LCD_WIDTH/2-10,LCD_HEIGHT/2+15-4,&testfont,msg);
 }
 
 void servo_update_pulse()
