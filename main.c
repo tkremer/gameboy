@@ -183,6 +183,7 @@ bool snprintl(char* s, int len, int32_t value) {
       ok = 0;
     }
     s[len-1-i] = '-';
+    i++;
   }
   if (val != 0) {
     ok = 0;

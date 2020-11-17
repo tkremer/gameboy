@@ -4,4 +4,5 @@
 #include "app_voltmeter.h"
 #include "app_oscilloscope.h"
 #include "app_servo.h"
+#include "app_onewire.h"
 #include "app_pinpadd.h"
