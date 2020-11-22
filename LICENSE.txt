@@ -1,5 +1,5 @@
 This project is licensed under the terms of the GNU GPL ver. 2 or 3.
-Copyright (c) 2011-2017 by Thomas Kremer.
+Copyright (c) 2011-2020 by Thomas Kremer.
 
 The only exception is the font in consolefont_tiny.pgm and testfont.h,
 which seems to be the font
